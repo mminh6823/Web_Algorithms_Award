@@ -1,0 +1,12 @@
+D:\.Net\Web_algorithm_award\Web_algorithm_award_Model\obj\Debug\net8.0\Web_algorithm_award_Model.GeneratedMSBuildEditorConfig.editorconfig
+D:\.Net\Web_algorithm_award\Web_algorithm_award_Model\obj\Debug\net8.0\Web_algorithm_award_Model.AssemblyInfoInputs.cache
+D:\.Net\Web_algorithm_award\Web_algorithm_award_Model\obj\Debug\net8.0\Web_algorithm_award_Model.AssemblyInfo.cs
+D:\.Net\Web_algorithm_award\Web_algorithm_award_Model\obj\Debug\net8.0\Web_algorithm_award_Model.csproj.CoreCompileInputs.cache
+D:\.Net\Web_algorithm_award\Web_algorithm_award_Model\bin\Debug\net8.0\Web_algorithm_award_Model.deps.json
+D:\.Net\Web_algorithm_award\Web_algorithm_award_Model\bin\Debug\net8.0\Web_algorithm_award_Model.dll
+D:\.Net\Web_algorithm_award\Web_algorithm_award_Model\bin\Debug\net8.0\Web_algorithm_award_Model.pdb
+D:\.Net\Web_algorithm_award\Web_algorithm_award_Model\obj\Debug\net8.0\Web_algorithm_award_Model.csproj.AssemblyReference.cache
+D:\.Net\Web_algorithm_award\Web_algorithm_award_Model\obj\Debug\net8.0\Web_algorithm_award_Model.dll
+D:\.Net\Web_algorithm_award\Web_algorithm_award_Model\obj\Debug\net8.0\refint\Web_algorithm_award_Model.dll
+D:\.Net\Web_algorithm_award\Web_algorithm_award_Model\obj\Debug\net8.0\Web_algorithm_award_Model.pdb
+D:\.Net\Web_algorithm_award\Web_algorithm_award_Model\obj\Debug\net8.0\ref\Web_algorithm_award_Model.dll

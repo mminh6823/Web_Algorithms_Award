@@ -1,0 +1,15 @@
+D:\.Net\Web_algorithm_award\Web_algorithm_award_DataAccess\bin\Debug\net8.0\Web_algorithm_award_DataAccess.deps.json
+D:\.Net\Web_algorithm_award\Web_algorithm_award_DataAccess\bin\Debug\net8.0\Web_algorithm_award_DataAccess.dll
+D:\.Net\Web_algorithm_award\Web_algorithm_award_DataAccess\bin\Debug\net8.0\Web_algorithm_award_DataAccess.pdb
+D:\.Net\Web_algorithm_award\Web_algorithm_award_DataAccess\bin\Debug\net8.0\Web_algorithm_award_Model.dll
+D:\.Net\Web_algorithm_award\Web_algorithm_award_DataAccess\bin\Debug\net8.0\Web_algorithm_award_Model.pdb
+D:\.Net\Web_algorithm_award\Web_algorithm_award_DataAccess\obj\Debug\net8.0\Web_algorithm_award_DataAccess.csproj.AssemblyReference.cache
+D:\.Net\Web_algorithm_award\Web_algorithm_award_DataAccess\obj\Debug\net8.0\Web_algorithm_award_DataAccess.GeneratedMSBuildEditorConfig.editorconfig
+D:\.Net\Web_algorithm_award\Web_algorithm_award_DataAccess\obj\Debug\net8.0\Web_algorithm_award_DataAccess.AssemblyInfoInputs.cache
+D:\.Net\Web_algorithm_award\Web_algorithm_award_DataAccess\obj\Debug\net8.0\Web_algorithm_award_DataAccess.AssemblyInfo.cs
+D:\.Net\Web_algorithm_award\Web_algorithm_award_DataAccess\obj\Debug\net8.0\Web_algorithm_award_DataAccess.csproj.CoreCompileInputs.cache
+D:\.Net\Web_algorithm_award\Web_algorithm_award_DataAccess\obj\Debug\net8.0\Web_algo.1F9394CB.Up2Date
+D:\.Net\Web_algorithm_award\Web_algorithm_award_DataAccess\obj\Debug\net8.0\Web_algorithm_award_DataAccess.dll
+D:\.Net\Web_algorithm_award\Web_algorithm_award_DataAccess\obj\Debug\net8.0\refint\Web_algorithm_award_DataAccess.dll
+D:\.Net\Web_algorithm_award\Web_algorithm_award_DataAccess\obj\Debug\net8.0\Web_algorithm_award_DataAccess.pdb
+D:\.Net\Web_algorithm_award\Web_algorithm_award_DataAccess\obj\Debug\net8.0\ref\Web_algorithm_award_DataAccess.dll

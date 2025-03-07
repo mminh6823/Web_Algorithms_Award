@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\Web_algorithm_award.props" />
+</Project>

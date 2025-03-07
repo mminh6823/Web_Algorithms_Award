@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35707.178 d17.12
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web_algorithm_award", "Web_algorithm_award\Web_algorithm_award.csproj", "{295AA3A6-EEC8-4974-B338-405E497C384D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web_algorithm_award_Model", "Web_algorithm_award_Model\Web_algorithm_award_Model.csproj", "{C0B75613-A02A-4C3F-9878-4405B5B1ECF6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web_algorithm_award_DataAccess", "Web_algorithm_award_DataAccess\Web_algorithm_award_DataAccess.csproj", "{8488BABC-C530-4DCC-9BD9-B22D1AB53266}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{295AA3A6-EEC8-4974-B338-405E497C384D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{295AA3A6-EEC8-4974-B338-405E497C384D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{295AA3A6-EEC8-4974-B338-405E497C384D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{295AA3A6-EEC8-4974-B338-405E497C384D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0B75613-A02A-4C3F-9878-4405B5B1ECF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0B75613-A02A-4C3F-9878-4405B5B1ECF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0B75613-A02A-4C3F-9878-4405B5B1ECF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0B75613-A02A-4C3F-9878-4405B5B1ECF6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8488BABC-C530-4DCC-9BD9-B22D1AB53266}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8488BABC-C530-4DCC-9BD9-B22D1AB53266}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8488BABC-C530-4DCC-9BD9-B22D1AB53266}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8488BABC-C530-4DCC-9BD9-B22D1AB53266}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
