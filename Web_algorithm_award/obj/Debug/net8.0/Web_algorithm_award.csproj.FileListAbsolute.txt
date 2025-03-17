@@ -311,3 +311,4 @@ D:\.Net\Web_algorithm_award\Web_algorithm_award\bin\Debug\net8.0\runtimes\win\li
 D:\.Net\Web_algorithm_award\Web_algorithm_award\bin\Debug\net8.0\runtimes\win\lib\net7.0\System.Windows.Extensions.dll
 D:\.Net\Web_algorithm_award\Web_algorithm_award\bin\Debug\net8.0\Web_algorithm_award_DataAccess.dll
 D:\.Net\Web_algorithm_award\Web_algorithm_award\bin\Debug\net8.0\Web_algorithm_award_DataAccess.pdb
+D:\.Net\Web_algorithm_award\Web_algorithm_award\obj\Debug\net8.0\Web_algorithm_award.sourcelink.json

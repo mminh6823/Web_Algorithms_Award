@@ -13,3 +13,4 @@ D:\.Net\Web_algorithm_award\Web_algorithm_award_DataAccess\obj\Debug\net8.0\Web_
 D:\.Net\Web_algorithm_award\Web_algorithm_award_DataAccess\obj\Debug\net8.0\refint\Web_algorithm_award_DataAccess.dll
 D:\.Net\Web_algorithm_award\Web_algorithm_award_DataAccess\obj\Debug\net8.0\Web_algorithm_award_DataAccess.pdb
 D:\.Net\Web_algorithm_award\Web_algorithm_award_DataAccess\obj\Debug\net8.0\ref\Web_algorithm_award_DataAccess.dll
+D:\.Net\Web_algorithm_award\Web_algorithm_award_DataAccess\obj\Debug\net8.0\Web_algorithm_award_DataAccess.sourcelink.json

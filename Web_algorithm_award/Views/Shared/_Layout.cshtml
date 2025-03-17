@@ -3,64 +3,31 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Web_algorithm_award</title>
+    <title>@ViewData["Title"] - Web Giải Thuật</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Web_algorithm_award.styles.css" asp-append-version="true" />
 </head>
 <body>
-    <header>
-        <header>
-            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-primary bg-dark text-white border-bottom box-shadow mb-5">
-                <div class="container-fluid">
-                    <a class="navbar-brand text-white" asp-area="" asp-controller="Home" asp-action="Index" id="aurora-text">Trang chủ</a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                            aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                        <ul class="navbar-nav me-auto">
-                            @if (User.IsInRole(RoleDetails.Role_Admin))
-                            {
-
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        Quản lý
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        <li>
-                                            <a class="dropdown-item" asp-controller="" asp-action="Index" asp-area="Admin">
-                                                User
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
-                            }
-                            @if (User.Identity.IsAuthenticated)
-                            {
-                                <li class="nav-item">
-                                    <a asp-area="Customer" asp-controller="ShoppingCart" asp-action="Index" class="nav-link text-white position-relative">
-                                        <i class="bi bi-cart-fill me-1 text-white"></i>
-                                        Giỏ hàng <span id="cart-amount"></span>
-                                    </a>
-                                </li>
-                            }
-                        </ul>
-                        <partial name="_LoginPartial" />
-                    </div>
-                </div>
-            </nav>
-        </header>
-    </header>
+    @await Component.InvokeAsync("Menu")
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            <p>© 2025 Web Giải Thuật - Tất cả các quyền được bảo lưu.</p>
+    <footer class=" footer text-muted text-center">
+        <div class="container" >
+            <p style="display: inline-flex; align-items: center;">
+                © 2025 Giải Thuật cùng Minh -
+                <a href="https://github.com/" target="_blank" class="text-dark" style="margin-left: 5px;">
+                    <i class="fab fa-github fa-2x" style="vertical-align: middle;"></i>
+                </a>
+                <a href="https://www.linkedin.com/in/minh-nguyễn-8b5633335/" target="_blank" class="text-primary" style="margin-left: 10px;">
+                    <i class="fab fa-linkedin fa-2x" style="vertical-align: middle;"></i>
+                </a>
+            </p>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

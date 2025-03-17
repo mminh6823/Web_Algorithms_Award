@@ -10,3 +10,4 @@ D:\.Net\Web_algorithm_award\Web_algorithm_award_Model\obj\Debug\net8.0\Web_algor
 D:\.Net\Web_algorithm_award\Web_algorithm_award_Model\obj\Debug\net8.0\refint\Web_algorithm_award_Model.dll
 D:\.Net\Web_algorithm_award\Web_algorithm_award_Model\obj\Debug\net8.0\Web_algorithm_award_Model.pdb
 D:\.Net\Web_algorithm_award\Web_algorithm_award_Model\obj\Debug\net8.0\ref\Web_algorithm_award_Model.dll
+D:\.Net\Web_algorithm_award\Web_algorithm_award_Model\obj\Debug\net8.0\Web_algorithm_award_Model.sourcelink.json

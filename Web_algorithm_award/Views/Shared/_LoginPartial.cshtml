@@ -7,14 +7,16 @@
 <ul class="navbar-nav">
     @if (SignInManager.IsSignedIn(User))
     {
+        var user = await UserManager.GetUserAsync(User);
+        var displayName = user?.Name ?? "Người dùng";
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="bi bi-person-fill me-1 fs-5"></i>@UserManager.GetUserName(User)
+                <i class="bi bi-person-fill me-1 fs-5"></i>@displayName
             </a>
             <ul class="dropdown-menu">
                 <li>
                     <a class="dropdown-item" asp-page="/Account/Manage/Index" asp-area="Identity" title="Quản lý thông tin">
-                        Quản lý thông tin User
+                        Quản lý thông tin 
                     </a>
                 </li>
                 <li><hr class="dropdown-divider"></li>

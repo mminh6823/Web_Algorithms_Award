@@ -62,6 +62,12 @@ builder.Services.Configure<ApiBehaviorOptions>(o =>
     };
 });
 
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    options.SignIn.RequireConfirmedEmail = false; // Không yêu cầu xác nhận email
+});
+
+
 // Thêm Razor Pages (dùng cho Identity UI)
 builder.Services.AddRazorPages();
 

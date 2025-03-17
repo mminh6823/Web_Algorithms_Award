@@ -1,0 +1,57 @@
+﻿@{
+    ViewData["Title"] = "Thuật toán Apriori";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg p-4">
+        <h2 class="text-center text-primary">📊 Thuật toán Apriori</h2>
+
+        <form asp-action="UploadFile" method="post" enctype="multipart/form-data">
+            <div class="mt-3 d-flex justify-content-center">
+                <a href="~/FileSample/sample.svm" class="btn btn-secondary w-20" download>📥 Tải file mẫu</a>
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-bold">📂 Chọn File .SVM</label>
+                <input type="file" name="file" class="form-control" required />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">📊 Min Support (> 0 và <= 1)</label>
+                <input type="number" name="minSupport" class="form-control" step="any" min="0" max="1" required />
+            </div>
+
+            <button type="submit" class="btn btn-success w-100">🚀 Thực thi</button>
+        </form>
+
+        @if (TempData["Message"] != null)
+        {
+            <div class="alert alert-info mt-3">@TempData["Message"]</div>
+        }
+
+        @if (ViewBag.FrequentItemsets != null)
+        {
+            <h3 class="mt-4 text-success">📈 Kết quả:</h3>
+            <p class="fw-bold">Số tập phổ biến tìm được: <span class="badge bg-primary">@ViewBag.TotalItemsets</span></p>
+
+            <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+                <table class="table table-hover table-bordered" style="table-layout: fixed; width: 100%;">
+                    <thead class="table-dark">
+                        <tr>
+                            <th style="width: 75%;">🛒 Itemset</th>
+                            <th style="width: 25%;">📊 Support</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in ViewBag.FrequentItemsets)
+                        {
+                            <tr>
+                                <td style="word-wrap: break-word;">@string.Join(", ", item.Itemset)</td>
+                                <td><span class="badge bg-info">@item.Support</span></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</div>

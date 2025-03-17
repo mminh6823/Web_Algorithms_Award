@@ -1,7 +1,7 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Profile";
+    ViewData["Title"] = "Thông tin cá nhân";
     ViewData["ActivePage"] = ManageNavPages.Index;
 }
 
@@ -13,14 +13,24 @@
             <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
             <div class="form-floating mb-3">
                 <input asp-for="Username" class="form-control" placeholder="Please choose your username." disabled />
-                <label asp-for="Username" class="form-label"></label>
+                <label asp-for="Username" class="form-label">Tài khoản</label>
             </div>
             <div class="form-floating mb-3">
-                <input asp-for="Input.PhoneNumber" class="form-control" placeholder="Please enter your phone number."/>
+                <input asp-for="Input.PhoneNumber" class="form-control" placeholder="Vui lòng nhập số điện thoại của bạn." />
                 <label asp-for="Input.PhoneNumber" class="form-label"></label>
                 <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
             </div>
-            <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
+            <div class="form-floating mb-3">
+                <input asp-for="HomeAddress" class="form-control" placeholder="Vui lòng địa chỉ của bạn." disabled />
+                <label asp-for="HomeAddress" class="form-label">Địa chỉ</label>
+                
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="PostalCode" class="form-control" placeholder="Vui lòng nhập mã bưu điện."  disabled/>
+                <label asp-for="PostalCode" class="form-label">Mã bưu điện</label>
+               
+            </div>
+            <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">Lưu</button>
         </form>
     </div>
 </div>

@@ -1,4 +1,42 @@
 ﻿@{
     ViewData["Title"] = "Home";
 }
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-primary bg-dark text-white border-bottom box-shadow mb-5">
+        <div class="container-fluid">
+            <a class="navbar-brand text-white" asp-area="" asp-controller="Home" asp-action="Index" id="aurora-text">Trang chủ</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <ul class="navbar-nav me-auto">
+                    @if (User.IsInRole(RoleDetails.Role_Admin))
+                    {
 
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Quản lý
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a class="dropdown-item" asp-controller="" asp-action="Index" asp-area="Admin">
+                                        User
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+                    @if (User.Identity!.IsAuthenticated)
+                    {
+                        <li class="nav-item">
+                            <a asp-area="Customer" asp-controller="Apriori" asp-action="Index" class="nav-link text-white position-relative">
+                                <i class="bi bi-cart-fill me-1 text-white"></i>
+                                Giải thuật Apriori <span id="cart-amount"></span>
+                            </a>
+                        </li>
+                    }
+                </ul>
+                <partial name="_LoginPartial" />
+            </div>
+        </div>
+    </nav>

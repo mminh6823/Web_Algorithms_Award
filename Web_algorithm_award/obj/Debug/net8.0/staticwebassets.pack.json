@@ -5,6 +5,10 @@
       "PackagePath": "staticwebassets\\Web_algorithm_award.gr9xrq4wa6.bundle.scp.css"
     },
     {
+      "Id": "D:\\.Net\\Web_algorithm_award\\Web_algorithm_award\\wwwroot\\FileSample\\sample.svm",
+      "PackagePath": "staticwebassets\\FileSample\\sample.svm"
+    },
+    {
       "Id": "D:\\.Net\\Web_algorithm_award\\Web_algorithm_award\\wwwroot\\css\\site.css",
       "PackagePath": "staticwebassets\\css\\site.css"
     },
