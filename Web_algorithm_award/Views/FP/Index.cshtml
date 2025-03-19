@@ -1,0 +1,100 @@
+﻿@{
+    ViewData["Title"] = "Thuật toán FP-Growth";
+}
+
+<div class="container mt-5">
+    <h2 class="text-center text-primary">
+        <i class="bi bi-bar-chart-line-fill"></i>📊 Thuật toán FP-Growth
+    </h2>
+
+    <div class="card p-4 shadow-sm">
+        <form asp-controller="FP" asp-action="ProcessFile" method="post" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label for="fileUpload" class="form-label fw-bold">
+                    <i class="bi bi-folder2-open text-warning"></i>📁 Chọn File .SVM
+                </label>
+                <input type="file" name="uploadedFile" id="fileUpload" class="form-control" required />
+            </div>
+
+            <div class="mb-3">
+                <label for="minSupport" class="form-label fw-bold">
+                    <i class="bi bi-bar-chart-fill text-info"></i>📈 Min Support (> 0 và <= 1)
+                </label>
+                <input type="text" name="minSupportStr" id="minSupport" class="form-control"
+                       step="0.01" min="0" max="1" required lang="en" pattern="\d+(\.\d{1,2})?" />
+            </div>
+
+            <button type="submit" class="btn btn-success w-100">
+                <i class="bi bi-rocket-takeoff"></i>🚀 Thực thi
+            </button>
+        </form>
+    </div>
+
+    @if (!string.IsNullOrEmpty(ViewBag.Message))
+    {
+        <div class="alert alert-warning text-center mt-3">
+            <i class="bi bi-exclamation-triangle-fill"></i> @ViewBag.Message
+        </div>
+    }
+
+    @if (ViewBag.FPTreeJson != null)
+    {
+        <h2 class="text-center mt-4">
+            <i class="bi bi-diagram-3-fill"></i>🌐 Kết quả FP-Tree:
+        </h2>
+        <div id="tree-container" class="d-flex justify-content-center"></div>
+
+        <script src="https://d3js.org/d3.v6.min.js"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                var treeData = @Html.Raw(ViewBag.FPTreeJson);
+                if (!treeData || !treeData.Children || treeData.Children.length === 0) {
+                    document.getElementById("tree-container").innerHTML =
+                        "<div class='alert alert-warning text-center'><i class='bi bi-x-circle-fill'></i>⚠️ Không có dữ liệu hợp lệ.</div>";
+                    return;
+                }
+
+                var width = 900, height = 600;
+                var svg = d3.select("#tree-container")
+                    .append("svg")
+                    .attr("width", width)
+                    .attr("height", height)
+                    .append("g")
+                    .attr("transform", "translate(50,50)");
+
+                var hierarchyData = d3.hierarchy(treeData, d => d.Children);
+                var treeLayout = d3.tree().size([width - 100, height - 150]);
+                treeLayout(hierarchyData);
+
+                var link = svg.selectAll(".link")
+                    .data(hierarchyData.links())
+                    .enter()
+                    .append("line")
+                    .attr("class", "link")
+                    .attr("x1", d => d.source.x)
+                    .attr("y1", d => d.source.y)
+                    .attr("x2", d => d.target.x)
+                    .attr("y2", d => d.target.y)
+                    .attr("stroke", "#999")
+                    .attr("stroke-width", 2);
+
+                var node = svg.selectAll(".node")
+                    .data(hierarchyData.descendants())
+                    .enter()
+                    .append("g")
+                    .attr("transform", d => `translate(${d.x},${d.y})`);
+
+                node.append("circle")
+                    .attr("r", 12)
+                    .attr("fill", "teal");
+
+                node.append("text")
+                    .attr("dy", -15)
+                    .attr("text-anchor", "middle")
+                    .attr("font-size", "12px")
+                    .attr("fill", "#333")
+                    .text(d => `${d.data.Item} (${d.data.Count})`);
+            });
+        </script>
+    }
+</div>

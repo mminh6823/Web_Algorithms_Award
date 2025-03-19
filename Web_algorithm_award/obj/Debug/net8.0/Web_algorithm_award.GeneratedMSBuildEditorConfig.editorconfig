@@ -192,6 +192,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXByaW9yaVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/.Net/Web_algorithm_award/Web_algorithm_award/Views/FP/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRlBcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/.Net/Web_algorithm_award/Web_algorithm_award/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
