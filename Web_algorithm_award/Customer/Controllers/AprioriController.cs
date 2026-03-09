@@ -1,18 +1,20 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+using Web_algorithm_award.Services;
 
 namespace Web_algorithm_award.Areas.Customer.Controllers
 {
     [Authorize]
     public class AprioriController : Controller
     {
+        private readonly GeminiService _gemini;
+
+        public AprioriController(GeminiService gemini)
+        {
+            _gemini = gemini;
+        }
+
         private static Dictionary<string, List<string>> transactions = new Dictionary<string, List<string>>();
 
         public IActionResult Index()
@@ -47,26 +49,39 @@ namespace Web_algorithm_award.Areas.Customer.Controllers
                     if (parts.Length == 2)
                     {
                         string tid = parts[0];
-                        List<string> items = parts[1].Split(',').Select(x => x.Trim()).ToList();
+                        List<string> items = parts[1]
+                            .Split(',')
+                            .Select(x => x.Trim())
+                            .ToList();
+
                         transactions[tid] = items;
                     }
                 }
             }
 
-            return RunApriori(minSupport);
+            return await RunApriori(minSupport);
         }
 
         [HttpPost]
-        public IActionResult RunApriori(string minSupport)
+        public async Task<IActionResult> RunApriori(string minSupport)
         {
-            if (!double.TryParse(minSupport, NumberStyles.Any, CultureInfo.InvariantCulture, out double support) || support <= 0 || support > 1)
+            if (!double.TryParse(minSupport, NumberStyles.Any, CultureInfo.InvariantCulture,
+                out double support) || support <= 0 || support > 1)
             {
                 TempData["Message"] = "⚠️ Ngưỡng hỗ trợ không hợp lệ!";
                 return RedirectToAction("Index");
             }
 
-            var frequentItemsets = AprioriAlgorithm.Run(transactions.Values.ToList(), support);
-            var result = frequentItemsets.Select(x => new { Itemset = string.Join(", ", x.Key), Support = x.Value }).ToList();
+            var frequentItemsets =
+                AprioriAlgorithm.Run(transactions.Values.ToList(), support);
+
+            var result = frequentItemsets
+                .Select(x => new
+                {
+                    Itemset = string.Join(", ", x.Key),
+                    Support = x.Value
+                })
+                .ToList();
 
             if (result.Count == 0)
             {
@@ -74,40 +89,84 @@ namespace Web_algorithm_award.Areas.Customer.Controllers
                 return RedirectToAction("Index");
             }
 
+            // TẠO PROMPT CHO AI
+
+            var transactionText = string.Join("\n",
+                transactions.Select(t =>
+                    $"{t.Key} {string.Join(",", t.Value)}"));
+
+            var resultText = string.Join("\n",
+                result.Select(r =>
+                    $"Itemset: {r.Itemset} - Support: {r.Support}"));
+
+            var prompt = $@"
+                        Explain how the Apriori algorithm produced these frequent itemsets.
+
+                        Transactions:
+                        {transactionText}
+
+                        Result:
+                        {resultText}
+
+                        Explain step by step in Vietnamese.
+                        ";
+
+            // GỌI GEMINI AI
+
+            var explanation = await _gemini.GenerateExplanation(prompt);
+
+            // TRẢ KẾT QUẢ RA VIEW
+
             ViewBag.FrequentItemsets = result;
             ViewBag.TotalItemsets = result.Count;
             ViewBag.Support = support;
+            ViewBag.AIExplanation = explanation;
+
             return View("Index");
         }
     }
 
+    // APRIORI ALGORITHM
+
     public static class AprioriAlgorithm
     {
-        public static Dictionary<HashSet<string>, double> Run(List<List<string>> transactions, double minSupport)
+        public static Dictionary<HashSet<string>, double> Run(
+            List<List<string>> transactions,
+            double minSupport)
         {
-            Dictionary<HashSet<string>, double> frequentItemsets = new Dictionary<HashSet<string>, double>(HashSet<string>.CreateSetComparer());
+            Dictionary<HashSet<string>, double> frequentItemsets =
+                new Dictionary<HashSet<string>, double>(
+                    HashSet<string>.CreateSetComparer());
+
             int totalTransactions = transactions.Count;
 
-            // Đếm số lần xuất hiện của từng item đơn lẻ
+            // Đếm item đơn
             var itemCounts = transactions
                 .SelectMany(t => t)
                 .GroupBy(i => i)
-                .ToDictionary(g => new HashSet<string> { g.Key }, g => (double)g.Count() / totalTransactions);
+                .ToDictionary(
+                    g => new HashSet<string> { g.Key },
+                    g => (double)g.Count() / totalTransactions
+                );
 
-            // Lọc các itemset phổ biến
             var currentItemsets = itemCounts
                 .Where(i => i.Value >= minSupport)
                 .ToDictionary(i => i.Key, i => i.Value);
 
-            frequentItemsets = new Dictionary<HashSet<string>, double>(currentItemsets);
+            frequentItemsets =
+                new Dictionary<HashSet<string>, double>(currentItemsets);
 
             int k = 2;
+
             while (currentItemsets.Count > 0)
             {
-                var candidateItemsets = GenerateCandidates(currentItemsets.Keys.ToList(), k);
-                var candidateCounts = new Dictionary<HashSet<string>, int>(HashSet<string>.CreateSetComparer());
+                var candidateItemsets =
+                    GenerateCandidates(currentItemsets.Keys.ToList(), k);
 
-                // Đếm số lần xuất hiện của từng tập ứng viên
+                var candidateCounts =
+                    new Dictionary<HashSet<string>, int>(
+                        HashSet<string>.CreateSetComparer());
+
                 foreach (var transaction in transactions)
                 {
                     foreach (var candidate in candidateItemsets)
@@ -116,17 +175,19 @@ namespace Web_algorithm_award.Areas.Customer.Controllers
                         {
                             if (!candidateCounts.ContainsKey(candidate))
                                 candidateCounts[candidate] = 0;
+
                             candidateCounts[candidate]++;
                         }
                     }
                 }
 
-                // Chuyển đổi thành support và lọc theo minSupport
                 currentItemsets = candidateCounts
-                    .Where(c => (double)c.Value / totalTransactions >= minSupport)
-                    .ToDictionary(c => c.Key, c => (double)c.Value / totalTransactions);
+                    .Where(c =>
+                        (double)c.Value / totalTransactions >= minSupport)
+                    .ToDictionary(
+                        c => c.Key,
+                        c => (double)c.Value / totalTransactions);
 
-                // Thêm vào danh sách tập phổ biến
                 foreach (var item in currentItemsets)
                     frequentItemsets[item.Key] = item.Value;
 
@@ -136,7 +197,9 @@ namespace Web_algorithm_award.Areas.Customer.Controllers
             return frequentItemsets;
         }
 
-        private static List<HashSet<string>> GenerateCandidates(List<HashSet<string>> prevItemsets, int k)
+        private static List<HashSet<string>> GenerateCandidates(
+            List<HashSet<string>> prevItemsets,
+            int k)
         {
             var candidates = new List<HashSet<string>>();
 
@@ -145,10 +208,14 @@ namespace Web_algorithm_award.Areas.Customer.Controllers
                 for (int j = i + 1; j < prevItemsets.Count; j++)
                 {
                     var unionSet = new HashSet<string>(prevItemsets[i]);
+
                     unionSet.UnionWith(prevItemsets[j]);
 
-                    if (unionSet.Count == k && !candidates.Any(c => c.SetEquals(unionSet)))
+                    if (unionSet.Count == k &&
+                        !candidates.Any(c => c.SetEquals(unionSet)))
+                    {
                         candidates.Add(unionSet);
+                    }
                 }
             }
 

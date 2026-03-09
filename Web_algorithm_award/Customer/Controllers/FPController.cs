@@ -1,15 +1,18 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+using Web_algorithm_award.Services;
 
 namespace Web_algorithm_award.Customer.Controllers
 {
     public class FPController : Controller
     {
+        private readonly GeminiService _gemini;
+
+        public FPController(GeminiService gemini)
+        {
+            _gemini = gemini;
+        }
+
         [HttpGet]
         public IActionResult Index()
         {
@@ -17,19 +20,28 @@ namespace Web_algorithm_award.Customer.Controllers
         }
 
         [HttpPost]
-        public IActionResult ProcessFile(IFormFile uploadedFile, string  minSupportStr)
+        public async Task<IActionResult> ProcessFile(IFormFile uploadedFile, string minSupportStr)
         {
             Console.WriteLine($"Giá trị minSupport từ frontend: {minSupportStr}");
+
             if (uploadedFile == null || uploadedFile.Length == 0)
             {
                 ViewBag.Message = "Vui lòng chọn tệp hợp lệ.";
                 return View("Index");
             }
-            // Chuyển đổi minSupport từ string sang float
-            if (!float.TryParse(minSupportStr, System.Globalization.NumberStyles.Float,
-                                System.Globalization.CultureInfo.InvariantCulture, out float minSupport)) ;
 
-                List<List<string>> transactions = new List<List<string>>();
+            // Parse minSupport
+            if (!float.TryParse(
+                    minSupportStr,
+                    System.Globalization.NumberStyles.Float,
+                    System.Globalization.CultureInfo.InvariantCulture,
+                    out float minSupport))
+            {
+                ViewBag.Message = "minSupport không hợp lệ.";
+                return View("Index");
+            }
+
+            List<List<string>> transactions = new List<List<string>>();
 
             using (var reader = new StreamReader(uploadedFile.OpenReadStream()))
             {
@@ -39,9 +51,13 @@ namespace Web_algorithm_award.Customer.Controllers
                     if (string.IsNullOrWhiteSpace(line)) continue;
 
                     var parts = line.Split(' ');
-                    if (parts.Length < 2) continue; // Bỏ qua dòng không hợp lệ
+                    if (parts.Length < 2) continue;
 
-                    var items = parts[1].Split(',').Select(i => i.Trim()).ToList(); // Bỏ TID, lấy danh sách item
+                    var items = parts[1]
+                        .Split(',')
+                        .Select(i => i.Trim())
+                        .ToList();
+
                     transactions.Add(items);
                 }
             }
@@ -52,7 +68,7 @@ namespace Web_algorithm_award.Customer.Controllers
                 return View("Index");
             }
 
-            // Tạo FP-Tree từ dữ liệu
+            // Build FP Tree
             var fpTree = BuildFPTree(transactions, minSupport);
 
             if (fpTree == null || fpTree.Children.Count == 0)
@@ -61,10 +77,34 @@ namespace Web_algorithm_award.Customer.Controllers
                 return View("Index");
             }
 
-            // Chuyển FP-Tree thành JSON để hiển thị trong View
+            // Convert tree -> JSON
             string treeJson = JsonConvert.SerializeObject(fpTree, Formatting.Indented);
 
+            // Convert transactions -> text
+            string transactionText = string.Join("\n",
+                transactions.Select(t => string.Join(", ", t)));
+
+            // Prompt AI
+            var prompt = $@"
+                Explain step by step in Vietnamese how the FP-Growth algorithm built this FP-Tree.
+
+                Transactions:
+                {transactionText}
+
+                Minimum Support:
+                {minSupport}
+
+                FP Tree Result:
+                {treeJson}
+                ";
+
+            // Call Gemini
+            var explanation = await _gemini.GenerateExplanation(prompt);
+
+            // Send to View
             ViewBag.FPTreeJson = treeJson;
+            ViewBag.Explanation = explanation;
+
             return View("Index");
         }
 
@@ -77,7 +117,7 @@ namespace Web_algorithm_award.Customer.Controllers
 
             Dictionary<string, int> frequency = new Dictionary<string, int>();
 
-            // ✅ 1. Đếm số lần xuất hiện của mỗi item
+            // 1. Đếm tần suất item
             foreach (var transaction in transactions)
             {
                 foreach (var item in transaction)
@@ -89,27 +129,30 @@ namespace Web_algorithm_award.Customer.Controllers
                 }
             }
 
-            // ✅ 2. Xác định số lần tối thiểu để một item được giữ lại
+            // 2. minCount
             int minCount = (int)Math.Ceiling(minSupport * transactions.Count);
 
-            var frequentItems = frequency.Where(kv => kv.Value >= minCount)
-                                         .OrderByDescending(kv => kv.Value)
-                                         .Select(kv => kv.Key)
-                                         .ToList();
+            var frequentItems = frequency
+                .Where(kv => kv.Value >= minCount)
+                .OrderByDescending(kv => kv.Value)
+                .Select(kv => kv.Key)
+                .ToList();
 
             if (frequentItems.Count == 0)
             {
-                return new Node("Empty Tree", 0, null); // 🔥 Không có item nào đạt minSupport
+                return new Node("Empty Tree", 0);
             }
 
-            // ✅ 3. Xây dựng FP-Tree
-            Node root = new Node("Null", 0, null);
+            // 3. Build Tree
+            Node root = new Node("Null", 0);
 
             foreach (var transaction in transactions)
             {
-                var sortedTransaction = transaction.Where(i => frequentItems.Contains(i))
-                                                   .OrderByDescending(i => frequency[i])
-                                                   .ToList();
+                var sortedTransaction = transaction
+                    .Where(i => frequentItems.Contains(i))
+                    .OrderByDescending(i => frequency[i])
+                    .ToList();
+
                 if (sortedTransaction.Count > 0)
                 {
                     InsertTransaction(root, sortedTransaction);
@@ -119,17 +162,17 @@ namespace Web_algorithm_award.Customer.Controllers
             return root;
         }
 
-
         private void InsertTransaction(Node root, List<string> transaction)
         {
             if (transaction.Count == 0) return;
 
             string item = transaction[0];
+
             Node child = root.Children.FirstOrDefault(n => n.Item == item);
 
             if (child == null)
             {
-                child = new Node(item, 1, root);
+                child = new Node(item, 1);
                 root.Children.Add(child);
             }
             else
@@ -144,10 +187,12 @@ namespace Web_algorithm_award.Customer.Controllers
     public class Node
     {
         public string Item { get; set; }
+
         public int Count { get; set; }
+
         public List<Node> Children { get; set; }
 
-        public Node(string item, int count, Node parent)
+        public Node(string item, int count)
         {
             Item = item;
             Count = count;

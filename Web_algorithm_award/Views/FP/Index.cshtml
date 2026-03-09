@@ -96,5 +96,24 @@
                     .text(d => `${d.data.Item} (${d.data.Count})`);
             });
         </script>
+        @if (ViewBag.Explanation != null)
+        {
+            <div class="card mt-4 border-info shadow-sm">
+
+                <div class="card-header bg-info text-white">
+                    🤖 AI Giải thích thuật toán FP-Growth
+                </div>
+
+                <div class="card-body bg-light"
+                     style="max-height: 350px; overflow-y: auto;">
+
+                    <pre style="white-space: pre-wrap; font-family: inherit;">
+                        @ViewBag.Explanation
+                            </pre>
+
+                </div>
+
+            </div>
+        }
     }
 </div>

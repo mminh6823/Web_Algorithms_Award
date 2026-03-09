@@ -4,36 +4,89 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Web Giải Thuật</title>
+    <link rel="icon" type="image/png" href="~/logo.png" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Web_algorithm_award.styles.css" asp-append-version="true" />
 </head>
+
 <body>
+
     @await Component.InvokeAsync("Menu")
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class=" footer text-muted text-center">
-        <div class="container" >
+    <footer class="footer text-muted text-center">
+        <div class="container">
             <p style="display: inline-flex; align-items: center;">
                 © 2025 Giải Thuật cùng Minh -
-                <a href="https://github.com/" target="_blank" class="text-dark" style="margin-left: 5px;">
-                    <i class="fab fa-github fa-2x" style="vertical-align: middle;"></i>
+                <a href="https://github.com/" target="_blank" class="text-dark" style="margin-left:5px;">
+                    <i class="fab fa-github fa-2x"></i>
                 </a>
-                <a href="https://www.linkedin.com/in/minh-nguyễn-8b5633335/" target="_blank" class="text-primary" style="margin-left: 10px;">
-                    <i class="fab fa-linkedin fa-2x" style="vertical-align: middle;"></i>
+                <a href="https://www.linkedin.com/in/minh-nguyễn-8b5633335/" target="_blank" class="text-primary" style="margin-left:10px;">
+                    <i class="fab fa-linkedin fa-2x"></i>
                 </a>
             </p>
         </div>
     </footer>
+
+    <!-- GLOBAL LOADING OVERLAY -->
+    <div id="globalLoading"
+         style="
+            position:fixed;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            background:rgba(0,0,0,0.5);
+            display:none;
+            align-items:center;
+            justify-content:center;
+            z-index:9999;
+         ">
+
+        <div class="bg-white p-4 rounded shadow text-center">
+
+            <div class="spinner-border text-primary mb-3"
+                 style="width:3rem;height:3rem;">
+            </div>
+
+            <h5>🤖 Hệ thống đang xử lý...</h5>
+            <p class="text-muted mb-0">
+                Vui lòng chờ trong giây lát
+            </p>
+
+        </div>
+    </div>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const forms = document.querySelectorAll("form");
+
+            forms.forEach(function (form) {
+
+                form.addEventListener("submit", function () {
+
+                    document.getElementById("globalLoading").style.display = "flex";
+
+                });
+
+            });
+
+        });
+    </script>
+
     @await RenderSectionAsync("Scripts", required: false)
+
 </body>
 </html>

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
+using Web_algorithm_award.Services;
 using Web_algorithm_award_DataAccess.Data;
 using Web_algorithm_award_Model;
 
@@ -70,7 +71,7 @@ builder.Services.Configure<IdentityOptions>(options =>
 
 // Thêm Razor Pages (dùng cho Identity UI)
 builder.Services.AddRazorPages();
-
+builder.Services.AddHttpClient<GeminiService>();
 var app = builder.Build();
 
 // Cấu hình Middleware
