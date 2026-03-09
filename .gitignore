@@ -9,6 +9,9 @@
 bin/
 obj/
 
+# EF Core migrations
+Migrations/
+
 # Rider
 .idea/
 
