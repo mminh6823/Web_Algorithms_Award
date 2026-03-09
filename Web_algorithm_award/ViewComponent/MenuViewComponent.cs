@@ -1,7 +1,4 @@
-﻿
-
-
-namespace Web_algorithm_award.ViewComponent
+﻿namespace Web_algorithm_award.ViewComponent
 {
     public class MenuViewComponent : Microsoft.AspNetCore.Mvc.ViewComponent
     {

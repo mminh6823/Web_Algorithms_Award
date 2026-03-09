@@ -1,5 +1,5 @@
-using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 using Web_algorithm_award.Models;
 
 namespace Web_algorithm_award.Controllers

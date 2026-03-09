@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -67,7 +66,6 @@ builder.Services.Configure<IdentityOptions>(options =>
 {
     options.SignIn.RequireConfirmedEmail = false; // Không yêu cầu xác nhận email
 });
-
 
 // Thêm Razor Pages (dùng cho Identity UI)
 builder.Services.AddRazorPages();
