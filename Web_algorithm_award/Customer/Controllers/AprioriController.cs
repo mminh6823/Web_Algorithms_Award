@@ -15,6 +15,9 @@ namespace Web_algorithm_award.Areas.Customer.Controllers
             _gemini = gemini;
         }
 
+
+
+
         private static Dictionary<string, List<string>> transactions = new Dictionary<string, List<string>>();
 
         public IActionResult Index()
