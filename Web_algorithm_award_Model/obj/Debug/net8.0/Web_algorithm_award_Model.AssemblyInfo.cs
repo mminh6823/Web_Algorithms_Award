@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Web_algorithm_award_Model")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+eead36be0e3973fb92f506b0bd5afe6ed9782be7")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e9cc8815f8e7766665c53d44b2649085bed0e23c")]
 [assembly: System.Reflection.AssemblyProductAttribute("Web_algorithm_award_Model")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Web_algorithm_award_Model")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
