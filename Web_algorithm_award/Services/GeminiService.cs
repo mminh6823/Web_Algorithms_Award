@@ -13,6 +13,7 @@ public class GeminiService
         _httpClient = httpClient;
         _apiKey = config["Gemini:ApiKey"]
             ?? throw new Exception("Gemini API key not configured.");
+        var a = _apiKey;
     }
 
     public async Task<string> GenerateExplanation(string prompt)
