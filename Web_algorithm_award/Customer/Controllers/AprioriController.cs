@@ -15,9 +15,6 @@ namespace Web_algorithm_award.Areas.Customer.Controllers
             _gemini = gemini;
         }
 
-
-
-
         private static Dictionary<string, List<string>> transactions = new Dictionary<string, List<string>>();
 
         public IActionResult Index()
@@ -114,11 +111,7 @@ namespace Web_algorithm_award.Areas.Customer.Controllers
                         Explain step by step in Vietnamese.
                         ";
 
-            // GỌI GEMINI AI
-
             var explanation = await _gemini.GenerateExplanation(prompt);
-
-            // TRẢ KẾT QUẢ RA VIEW
 
             ViewBag.FrequentItemsets = result;
             ViewBag.TotalItemsets = result.Count;
@@ -128,8 +121,6 @@ namespace Web_algorithm_award.Areas.Customer.Controllers
             return View("Index");
         }
     }
-
-    // APRIORI ALGORITHM
 
     public static class AprioriAlgorithm
     {

@@ -94,10 +94,8 @@ namespace Web_algorithm_award.Customer.Controllers
                 {treeJson}
                 ";
 
-            // Call Gemini
             var explanation = await _gemini.GenerateExplanation(prompt);
 
-            // Send to View
             ViewBag.FPTreeJson = treeJson;
             ViewBag.Explanation = explanation;
 
