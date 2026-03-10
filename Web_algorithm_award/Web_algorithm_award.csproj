@@ -26,4 +26,10 @@
     <ProjectReference Include="..\Web_algorithm_award_Model\Web_algorithm_award_Model.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="wwwroot\FileSample\sample.svm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

@@ -111,6 +111,13 @@
 
         <form asp-controller="FP" asp-action="ProcessFile" method="post" enctype="multipart/form-data">
 
+            <div class="d-flex justify-content-end mb-2">
+                <a href="/Apriori/DownloadSample"
+                   class="btn btn-sm btn-outline-info rounded-pill">
+                    📥 Tải file mẫu .SVM
+                </a>
+            </div>
+
             <div class="file-upload-box mb-4">
                 <label for="fileUpload" class="form-label fw-bold text-secondary">
                     <i class="bi bi-folder2-open text-warning"></i> 📂 Chọn File dữ liệu (.SVM)

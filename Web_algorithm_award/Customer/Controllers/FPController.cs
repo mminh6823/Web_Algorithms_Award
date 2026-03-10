@@ -176,6 +176,13 @@ namespace Web_algorithm_award.Customer.Controllers
 
             InsertTransaction(child, transaction.Skip(1).ToList());
         }
+        public IActionResult DownloadSampleFP()
+        {
+            var path = Path.Combine(Directory.GetCurrentDirectory(),
+                "wwwroot/FileSample/sample.svm");
+
+            return PhysicalFile(path, "application/octet-stream", "sample.svm");
+        }
     }
 
     public class Node

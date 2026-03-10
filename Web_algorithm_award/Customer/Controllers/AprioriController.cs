@@ -120,8 +120,14 @@ namespace Web_algorithm_award.Areas.Customer.Controllers
 
             return View("Index");
         }
-    }
+        public IActionResult DownloadSample()
+        {
+            var path = Path.Combine(Directory.GetCurrentDirectory(),
+                "wwwroot/FileSample/sample.svm");
 
+            return PhysicalFile(path, "application/octet-stream", "sample.svm");
+        }
+    }
     public static class AprioriAlgorithm
     {
         public static Dictionary<HashSet<string>, double> Run(
