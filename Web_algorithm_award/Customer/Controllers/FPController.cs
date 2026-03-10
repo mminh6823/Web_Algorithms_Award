@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Web_algorithm_award.Services;
+using Web_algorithm_award_Model;
 
 namespace Web_algorithm_award.Customer.Controllers
 {
@@ -182,22 +183,6 @@ namespace Web_algorithm_award.Customer.Controllers
                 "wwwroot/FileSample/sample.svm");
 
             return PhysicalFile(path, "application/octet-stream", "sample.svm");
-        }
-    }
-
-    public class Node
-    {
-        public string Item { get; set; }
-
-        public int Count { get; set; }
-
-        public List<Node> Children { get; set; }
-
-        public Node(string item, int count)
-        {
-            Item = item;
-            Count = count;
-            Children = new List<Node>();
         }
     }
 }
