@@ -2,13 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
-using System;
-using System.ComponentModel.DataAnnotations;
-using System.Text.Encodings.Web;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.ComponentModel.DataAnnotations;
 using Web_algorithm_award_Model;
 
 namespace Web_algorithm_award.Areas.Identity.Pages.Account.Manage
@@ -26,41 +23,24 @@ namespace Web_algorithm_award.Areas.Identity.Pages.Account.Manage
             _signInManager = signInManager;
         }
 
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
         public string Username { get; set; }
+
         [BindProperty]
         public string HomeAddress { get; set; }
+
         [BindProperty]
         public string PostalCode { get; set; }
 
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
         [TempData]
         public string StatusMessage { get; set; }
 
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
         [BindProperty]
         public InputModel Input { get; set; }
 
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
         public class InputModel
         {
-            /// <summary>
-            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-            ///     directly from your code. This API may change or be removed in future releases.
-            /// </summary>
-            [Phone]
+
+            [Phone(ErrorMessage = "Số điện thoại không đúng định dạng.")]
             [Display(Name = "Số điện thoại")]
             public string PhoneNumber { get; set; }
 
@@ -79,7 +59,7 @@ namespace Web_algorithm_award.Areas.Identity.Pages.Account.Manage
 
             Input = new InputModel
             {
-               PhoneNumber = phoneNumber
+                PhoneNumber = phoneNumber
             };
         }
 
@@ -108,6 +88,9 @@ namespace Web_algorithm_award.Areas.Identity.Pages.Account.Manage
             if (!ModelState.IsValid)
             {
                 await LoadAsync(user);
+
+                TempData["ErrorMessage"] = "Vui lòng kiểm tra lại thông tin nhập vào.";
+
                 return Page();
             }
 
@@ -117,13 +100,15 @@ namespace Web_algorithm_award.Areas.Identity.Pages.Account.Manage
                 var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
                 if (!setPhoneResult.Succeeded)
                 {
-                    StatusMessage = "Unexpected error when trying to set phone number.";
+                    TempData["ErrorMessage"] = "Đã xảy ra lỗi khi cập nhật số điện thoại.";
                     return RedirectToPage();
                 }
             }
 
             await _signInManager.RefreshSignInAsync(user);
-            StatusMessage = "Cập nhật thông tin cá nhân thành công";
+
+            TempData["SuccessMessage"] = "Cập nhật thông tin cá nhân thành công!";
+
             return RedirectToPage();
         }
     }

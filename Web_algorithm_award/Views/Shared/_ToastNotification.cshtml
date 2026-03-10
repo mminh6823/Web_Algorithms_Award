@@ -1,0 +1,52 @@
+﻿<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+@{
+    var toastMessage = "";
+    var iconType = "success";
+
+    if (TempData["SuccessMessage"] != null)
+    {
+        toastMessage = TempData["SuccessMessage"]!.ToString();
+        iconType = "success";
+    }
+    else if (TempData["ErrorMessage"] != null)
+    {
+        toastMessage = TempData["ErrorMessage"]!.ToString();
+        iconType = "error";
+    }
+    else if (TempData["InfoMessage"] != null)
+    {
+        toastMessage = TempData["InfoMessage"]!.ToString();
+        iconType = "info";
+    }
+    else if (TempData["StatusMessage"] != null)
+    {
+        toastMessage = TempData["StatusMessage"]!.ToString();
+        iconType = toastMessage!.StartsWith("Error") ? "error" : "success";
+        toastMessage = toastMessage.Replace("Error: ", "");
+    }
+}
+
+@if (!string.IsNullOrEmpty(toastMessage))
+{
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+            });
+
+            Toast.fire({
+                icon: '@iconType',
+                title: '@Html.Raw(toastMessage)'
+            });
+        });
+    </script>
+}

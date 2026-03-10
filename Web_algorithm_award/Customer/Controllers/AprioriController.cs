@@ -30,13 +30,13 @@ namespace Web_algorithm_award.Areas.Customer.Controllers
         {
             if (file == null || file.Length == 0)
             {
-                TempData["Message"] = "❌ Vui lòng chọn file hợp lệ!";
+                TempData["ErrorMessage"] = "❌ Vui lòng chọn file hợp lệ!";
                 return RedirectToAction("Index");
             }
 
             if (Path.GetExtension(file.FileName).ToLower() != ".svm")
             {
-                TempData["Message"] = "❌ Chỉ hỗ trợ file .svm!";
+                TempData["ErrorMessage"] = "❌ Chỉ hỗ trợ file .svm!";
                 return RedirectToAction("Index");
             }
 
@@ -71,7 +71,7 @@ namespace Web_algorithm_award.Areas.Customer.Controllers
             if (!double.TryParse(minSupport, NumberStyles.Any, CultureInfo.InvariantCulture,
                 out double support) || support <= 0 || support > 1)
             {
-                TempData["Message"] = "⚠️ Ngưỡng hỗ trợ không hợp lệ!";
+                TempData["ErrorMessage"] = "⚠️ Ngưỡng hỗ trợ không hợp lệ!";
                 return RedirectToAction("Index");
             }
 
@@ -88,10 +88,10 @@ namespace Web_algorithm_award.Areas.Customer.Controllers
 
             if (result.Count == 0)
             {
-                TempData["Message"] = "❌ Không có tập phổ biến nào thỏa mãn minsup!";
+                TempData["InfoMessage"] = "❌ Không có tập phổ biến nào thỏa mãn minsup!";
                 return RedirectToAction("Index");
             }
-
+            TempData["SuccessMessage"] = "Phân tích dữ liệu thành công!";
             // TẠO PROMPT CHO AI
 
             var transactionText = string.Join("\n",

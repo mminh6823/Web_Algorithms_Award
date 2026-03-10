@@ -70,22 +70,38 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-
             const forms = document.querySelectorAll("form");
 
             forms.forEach(function (form) {
+                if (form.id === "logoutForm") return;
 
-                form.addEventListener("submit", function () {
+                form.addEventListener("submit", function (e) {
+
+                    if (window.jQuery && $(form).data('validator')) {
+
+                        if (!$(form).valid()) {
+                            return;
+                        }
+                    }
+                    else if (!form.checkValidity()) {
+                        return;
+                    }
 
                     document.getElementById("globalLoading").style.display = "flex";
 
+                    const submitBtn = form.querySelector('button[type="submit"]');
+                    if (submitBtn) {
+                        setTimeout(() => {
+                            submitBtn.disabled = true;
+                            // Đổi chữ nút thành Đang xử lý nếu muốn
+                            // submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Đang xử lý...';
+                        }, 50);
+                    }
                 });
-
             });
-
         });
     </script>
-
+    <partial name="_ToastNotification" />
     @await RenderSectionAsync("Scripts", required: false)
 
 </body>

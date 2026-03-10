@@ -1,39 +1,110 @@
 ﻿@using Microsoft.AspNetCore.Identity
 
-
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
-<ul class="navbar-nav">
+<style> 
+    .btn-nav-gradient {
+        background: linear-gradient(to right, #4facfe 0%, #00f2fe 100%);
+        color: white !important;
+        border-radius: 50px;
+        padding: 0.4rem 1.25rem !important;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        border: none;
+    }
+
+        .btn-nav-gradient:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 242, 254, 0.4);
+            color: white;
+        }
+
+    .btn-nav-outline {
+        border: 2px solid rgba(255, 255, 255, 0.7);
+        color: white !important;
+        border-radius: 50px;
+        padding: 0.35rem 1.1rem !important;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+        .btn-nav-outline:hover {
+            border-color: #ffffff;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+    .custom-dropdown {
+        border: none;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        padding: 0.5rem;
+        min-width: 220px;
+        margin-top: 10px !important;
+    }
+
+    .custom-dropdown-item {
+        border-radius: 10px;
+        padding: 0.6rem 1rem;
+        color: #2c3e50;
+        font-weight: 500;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+    }
+
+        .custom-dropdown-item:hover {
+            background-color: #f0faff;
+            color: #4facfe;
+        }
+
+    .logout-form-btn {
+        width: 100%;
+        text-align: left;
+        background: none;
+        border: none;
+    }
+
+        .logout-form-btn:hover {
+            background-color: #fff0f0;
+            color: #dc3545 !important;
+        }
+</style>
+
+<ul class="navbar-nav align-items-center">
     @if (SignInManager.IsSignedIn(User))
     {
         var user = await UserManager.GetUserAsync(User);
         var displayName = user?.Name ?? "Người dùng";
+        var firstChar = string.IsNullOrEmpty(displayName) ? "U" : displayName.Substring(0, 1).ToUpper();
+
         <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="bi bi-person-fill me-1 fs-5"></i>@displayName
+            <a class="nav-link dropdown-toggle text-white d-flex align-items-center gap-2" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+
+                <div class="d-flex align-items-center justify-content-center bg-white text-info rounded-circle shadow-sm" style="width: 32px; height: 32px; font-weight: 800; font-size: 1rem;">
+                    @firstChar
+                </div>
+
+                <span class="fw-semibold">@displayName</span>
             </a>
 
-            <ul class="dropdown-menu dropdown-menu-end">
+            <ul class="dropdown-menu dropdown-menu-end custom-dropdown">
                 <li>
-                    <a class="dropdown-item" asp-page="/Account/Manage/Index" asp-area="Identity" title="Quản lý thông tin">
-                        Quản lý thông tin
+                    <a class="dropdown-item custom-dropdown-item" asp-page="/Account/Manage/Index" asp-area="Identity" title="Quản lý thông tin">
+                        <i class="bi bi-person-lines-fill me-2 fs-5 text-info"></i> Quản lý thông tin
                     </a>
                 </li>
 
-                <li><hr class="dropdown-divider"></li>
+                <li><hr class="dropdown-divider mx-2 my-1"></li>
 
                 <li>
-                    <form class="dropdown-item px-1 py-0"
-                          id="logoutForm"
+                    <form id="logoutForm"
                           asp-area="Identity"
                           asp-page="/Account/Logout"
                           asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
 
-                        <button id="logout"
-                                type="submit"
-                                class="btn btn-link text-decoration-none text-black">
-                            Đăng xuất
+                        <button id="logout" type="submit" class="dropdown-item custom-dropdown-item logout-form-btn text-danger">
+                            <i class="bi bi-box-arrow-right me-2 fs-5"></i> Đăng xuất
                         </button>
                     </form>
                 </li>
@@ -42,11 +113,15 @@
     }
     else
     {
-        <li class="nav-item">
-            <a class="nav-link text-white" asp-area="Identity" asp-page="/Account/Register">Đăng kí</a>
+        <li class="nav-item me-2 my-1 my-lg-0">
+            <a class="nav-link btn-nav-outline" asp-area="Identity" asp-page="/Account/Login">
+                <i class="bi bi-box-arrow-in-right me-1"></i> Đăng nhập
+            </a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link text-white" asp-area="Identity" asp-page="/Account/Login">Đăng nhập</a>
+        <li class="nav-item my-1 my-lg-0">
+            <a class="nav-link btn-nav-gradient shadow-sm" asp-area="Identity" asp-page="/Account/Register">
+                <i class="bi bi-person-plus-fill me-1"></i> Đăng kí
+            </a>
         </li>
     }
 </ul>

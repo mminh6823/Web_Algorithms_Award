@@ -26,18 +26,17 @@ namespace Web_algorithm_award.Customer.Controllers
 
             if (uploadedFile == null || uploadedFile.Length == 0)
             {
-                ViewBag.Message = "Vui lòng chọn tệp hợp lệ.";
+                TempData["ErrorMessage"] = "Vui lòng chọn tệp hợp lệ.";
                 return View("Index");
             }
 
-            // Parse minSupport
             if (!float.TryParse(
                     minSupportStr,
                     System.Globalization.NumberStyles.Float,
                     System.Globalization.CultureInfo.InvariantCulture,
                     out float minSupport))
             {
-                ViewBag.Message = "minSupport không hợp lệ.";
+                TempData["ErrorMessage"] = "Giá trị Min Support không hợp lệ.";
                 return View("Index");
             }
 
@@ -64,23 +63,20 @@ namespace Web_algorithm_award.Customer.Controllers
 
             if (transactions.Count == 0)
             {
-                ViewBag.Message = "File không có dữ liệu hợp lệ.";
+                TempData["ErrorMessage"] = "File không có dữ liệu hợp lệ.";
                 return View("Index");
             }
 
-            // Build FP Tree
             var fpTree = BuildFPTree(transactions, minSupport);
 
             if (fpTree == null || fpTree.Children.Count == 0)
             {
-                ViewBag.Message = "Không tìm thấy mẫu phổ biến nào.";
+                TempData["InfoMessage"] = "Không tìm thấy mẫu phổ biến nào.";
                 return View("Index");
             }
-
-            // Convert tree -> JSON
+            TempData["SuccessMessage"] = "Phân tích dữ liệu và xây dựng FP-Tree thành công!";
             string treeJson = JsonConvert.SerializeObject(fpTree, Formatting.Indented);
 
-            // Convert transactions -> text
             string transactionText = string.Join("\n",
                 transactions.Select(t => string.Join(", ", t)));
 

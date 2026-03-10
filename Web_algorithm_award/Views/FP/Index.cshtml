@@ -2,55 +2,206 @@
     ViewData["Title"] = "Thuật toán FP-Growth";
 }
 
-<div class="container mt-5">
-    <h2 class="text-center text-primary">
-        <i class="bi bi-bar-chart-line-fill"></i>📊 Thuật toán FP-Growth
-    </h2>
+<style>
+    /* CSS đồng bộ với các trang trước */
+    .fpgrowth-wrapper {
+        background: linear-gradient(135deg, #74ebd5 0%, #9face6 100%);
+        min-height: 80vh;
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        padding: 3rem 1rem;
+        border-radius: 15px;
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+    }
 
-    <div class="card p-4 shadow-sm">
+    .fpgrowth-card {
+        background: #ffffff;
+        padding: 3rem 2.5rem;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        width: 100%;
+        max-width: 1000px; /* Rộng hơn Apriori vì biểu đồ cây D3.js tốn nhiều diện tích ngang */
+        transition: all 0.3s ease;
+    }
+
+    .fpgrowth-title {
+        color: #2c3e50;
+        font-weight: 800;
+        text-align: center;
+        margin-bottom: 2.5rem;
+    }
+
+    .btn-gradient {
+        background: linear-gradient(to right, #4facfe 0%, #00f2fe 100%);
+        border: none;
+        color: white;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+        .btn-gradient:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 242, 254, 0.4);
+            color: white;
+        }
+
+    .file-upload-box {
+        border: 2px dashed #ced4da;
+        border-radius: 15px;
+        padding: 1.5rem;
+        background-color: #f8f9fa;
+        transition: all 0.3s;
+    }
+
+        .file-upload-box:hover, .file-upload-box:focus-within {
+            border-color: #4facfe;
+            background-color: #f0faff;
+        }
+
+    .form-floating .form-control:focus {
+        border-color: #4facfe;
+        box-shadow: 0 0 0 0.25rem rgba(79, 172, 254, 0.25);
+    }
+
+    /* Vùng chứa biểu đồ cây */
+    .tree-wrapper {
+        background: #f8fcfd;
+        border: 1px solid #e9ecef;
+        border-radius: 15px;
+        padding: 1rem;
+        overflow-x: auto; /* Cuộn ngang nếu cây quá to */
+        margin-bottom: 2rem;
+    }
+
+    /* CSS cho thanh cuộn AI */
+    .ai-scroll {
+        max-height: 350px;
+        overflow-y: auto;
+    }
+
+        .ai-scroll::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .ai-scroll::-webkit-scrollbar-thumb {
+            background: #4facfe;
+            border-radius: 4px;
+        }
+
+        .ai-scroll::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+    .ai-text {
+        white-space: pre-wrap;
+        font-family: inherit;
+        margin: 0;
+        color: #2c3e50;
+    }
+</style>
+
+<div class="fpgrowth-wrapper">
+    <div class="fpgrowth-card">
+
+        <h2 class="fpgrowth-title">
+            <i class="bi bi-bar-chart-line-fill text-primary"></i>📊 Thuật toán FP-Growth
+        </h2>
+
         <form asp-controller="FP" asp-action="ProcessFile" method="post" enctype="multipart/form-data">
-            <div class="mb-3">
-                <label for="fileUpload" class="form-label fw-bold">
-                    <i class="bi bi-folder2-open text-warning"></i>📁 Chọn File .SVM
+
+            <div class="file-upload-box mb-4">
+                <label for="fileUpload" class="form-label fw-bold text-secondary">
+                    <i class="bi bi-folder2-open text-warning"></i> 📂 Chọn File dữ liệu (.SVM)
                 </label>
-                <input type="file" name="uploadedFile" id="fileUpload" class="form-control" required />
+                <input type="file" name="uploadedFile" id="fileUpload" class="form-control bg-white" required />
             </div>
 
-            <div class="mb-3">
-                <label for="minSupport" class="form-label fw-bold">
-                    <i class="bi bi-bar-chart-fill text-info"></i>📈 Min Support (> 0 và <= 1)
-                </label>
+            <div class="form-floating mb-4">
                 <input type="text" name="minSupportStr" id="minSupport" class="form-control"
-                       step="0.01" min="0" max="1" required lang="en" pattern="\d+(\.\d{1,2})?" />
+                       step="0.01" min="0" max="1" required lang="en" pattern="\d+(\.\d{1,2})?" placeholder="0.5" />
+                <label for="minSupport">
+                    <i class="bi bi-bar-chart-fill text-info"></i> 📈 Min Support (> 0 và <= 1)
+                </label>
             </div>
 
-            <button type="submit" class="btn btn-success w-100">
-                <i class="bi bi-rocket-takeoff"></i>🚀 Thực thi
+            <button type="submit" class="w-100 btn btn-lg btn-gradient rounded-pill">
+                <i class="bi bi-rocket-takeoff"></i> 🚀 Thực thi thuật toán
             </button>
         </form>
+
+        @if (ViewBag.FPTreeJson != null)
+        {
+            <hr class="my-5" style="border-top: 2px dashed #e9ecef; opacity: 1;">
+
+            <h4 class="mb-4 text-dark fw-bold text-center">
+                <i class="bi bi-diagram-3-fill text-primary"></i> 🌐 Cấu trúc FP-Tree
+            </h4>
+
+            <div class="tree-wrapper shadow-sm">
+                <div id="tree-container" class="d-flex justify-content-center"></div>
+            </div>
+
+            @if (ViewBag.Explanation != null)
+            {
+                <div class="card border-0 shadow-sm" style="border-radius: 15px; background: #f8fcfd; border-left: 5px solid #4facfe !important;">
+                    <div class="card-body">
+                        <h5 class="fw-bold mb-3" style="color: #4facfe;">
+                            🤖 AI Giải thích thuật toán
+                        </h5>
+
+                        <div class="ai-scroll pe-2 mt-3">
+                            <pre class="ai-text">@ViewBag.Explanation</pre>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+
     </div>
+</div>
+
+@section Scripts {
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     @if (!string.IsNullOrEmpty(ViewBag.Message))
     {
-        <div class="alert alert-warning text-center mt-3">
-            <i class="bi bi-exclamation-triangle-fill"></i> @ViewBag.Message
-        </div>
+        var message = ViewBag.Message.ToString();
+        var isError = message.ToLower().Contains("lỗi") || message.ToLower().Contains("không") || message.ToLower().Contains("error");
+        var iconType = isError ? "warning" : "success";
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 4000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer)
+                        toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                });
+
+                Toast.fire({
+                    icon: '@iconType',
+                    title: '@Html.Raw(message)'
+                });
+            });
+        </script>
     }
 
     @if (ViewBag.FPTreeJson != null)
     {
-        <h2 class="text-center mt-4">
-            <i class="bi bi-diagram-3-fill"></i>🌐 Kết quả FP-Tree:
-        </h2>
-        <div id="tree-container" class="d-flex justify-content-center"></div>
-
-        <script src="https://d3js.org/d3.v6.min.js"></script>
         <script>
             document.addEventListener("DOMContentLoaded", function () {
                 var treeData = @Html.Raw(ViewBag.FPTreeJson);
                 if (!treeData || !treeData.Children || treeData.Children.length === 0) {
                     document.getElementById("tree-container").innerHTML =
-                        "<div class='alert alert-warning text-center'><i class='bi bi-x-circle-fill'></i>⚠️ Không có dữ liệu hợp lệ.</div>";
+                        "<div class='alert alert-warning text-center m-4'><i class='bi bi-x-circle-fill'></i> ⚠️ Không có dữ liệu hợp lệ để vẽ cây.</div>";
                     return;
                 }
 
@@ -75,7 +226,7 @@
                     .attr("y1", d => d.source.y)
                     .attr("x2", d => d.target.x)
                     .attr("y2", d => d.target.y)
-                    .attr("stroke", "#999")
+                    .attr("stroke", "#cbd5e1") /* Đổi màu line nét hơn */
                     .attr("stroke-width", 2);
 
                 var node = svg.selectAll(".node")
@@ -85,35 +236,20 @@
                     .attr("transform", d => `translate(${d.x},${d.y})`);
 
                 node.append("circle")
-                    .attr("r", 12)
-                    .attr("fill", "teal");
+                    .attr("r", 14)
+                    .attr("fill", "#4facfe") /* Đổi màu node từ teal sang màu gradient xanh cho đồng bộ */
+                    .attr("stroke", "#fff")
+                    .attr("stroke-width", 3)
+                    .attr("box-shadow", "0 4px 6px rgba(0,0,0,0.1)");
 
                 node.append("text")
-                    .attr("dy", -15)
+                    .attr("dy", -22)
                     .attr("text-anchor", "middle")
-                    .attr("font-size", "12px")
-                    .attr("fill", "#333")
+                    .attr("font-size", "13px")
+                    .attr("font-weight", "600")
+                    .attr("fill", "#2c3e50")
                     .text(d => `${d.data.Item} (${d.data.Count})`);
             });
         </script>
-        @if (ViewBag.Explanation != null)
-        {
-            <div class="card mt-4 border-info shadow-sm">
-
-                <div class="card-header bg-info text-white">
-                    🤖 AI Giải thích thuật toán FP-Growth
-                </div>
-
-                <div class="card-body bg-light"
-                     style="max-height: 350px; overflow-y: auto;">
-
-                    <pre style="white-space: pre-wrap; font-family: inherit;">
-                        @ViewBag.Explanation
-                            </pre>
-
-                </div>
-
-            </div>
-        }
     }
-</div>
+}

@@ -2,18 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Logging;
+using System.ComponentModel.DataAnnotations;
 using Web_algorithm_award_Model;
 
 namespace Web_algorithm_award.Areas.Identity.Pages.Account
@@ -116,6 +109,7 @@ namespace Web_algorithm_award.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User đăng nhập thành công.");
+                    TempData["SuccessMessage"] = "Đăng nhập thành công! Chào mừng bạn quay lại.";
                     return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)
@@ -125,16 +119,18 @@ namespace Web_algorithm_award.Areas.Identity.Pages.Account
                 if (result.IsLockedOut)
                 {
                     _logger.LogWarning("User account locked out.");
+                    TempData["ErrorMessage"] = "Tài khoản của bạn đã bị khóa do đăng nhập sai nhiều lần.";
                     return RedirectToPage("./Lockout");
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    TempData["ErrorMessage"] = "Tài khoản hoặc mật khẩu không chính xác.";
                     return Page();
                 }
             }
 
             // If we got this far, something failed, redisplay form
+            TempData["ErrorMessage"] = "Vui lòng kiểm tra lại thông tin nhập vào.";
             return Page();
         }
     }

@@ -1,48 +1,114 @@
-﻿@{
-    ViewData["Title"] = "Home";
-}
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-primary bg-dark text-white border-bottom box-shadow mb-5">
-        <div class="container-fluid">
-            <a class="navbar-brand text-white" asp-area="" asp-controller="Home" asp-action="Index" id="aurora-text">Trang chủ</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav me-auto">
-                    @if (User.IsInRole(RoleDetails.Role_Admin))
-                    {
+﻿<style>
+    /* CSS cho thanh Navbar Dark Mode */
+    .custom-navbar {
+        background-color: rgba(15, 23, 42, 0.95); /* Màu nền xanh đen đậm */
+        backdrop-filter: blur(10px); /* Hiệu ứng kính mờ */
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* Bóng đổ đậm hơn cho dark mode */
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important; /* Viền sáng cực mỏng ở đáy */
+        padding: 0.8rem 0;
+    }
 
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Quản lý
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a class="dropdown-item" asp-controller="" asp-action="Index" asp-area="Admin">
-                                        User
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                    }
-                    @if (User.Identity!.IsAuthenticated)
-                    {
-                        <li class="nav-item">
-                            <a asp-area="Customer" asp-controller="Apriori" asp-action="Index" class="nav-link text-white position-relative">
-                                <i class="bi bi-cart-fill me-1 text-white"></i>
-                                Giải thuật Apriori <span id="cart-amount"></span>
-                            </a>
-                        </li>
+    /* Hiệu ứng chữ Gradient cho Logo (Giữ nguyên vì rất nổi bật trên nền tối) */
+    .brand-gradient {
+        background: linear-gradient(to right, #4facfe 0%, #00f2fe 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-weight: 800;
+        font-size: 1.5rem;
+        letter-spacing: -0.5px;
+    }
+
+    /* Tinh chỉnh các link trên Navbar (Chữ sáng) */
+    .nav-link-custom {
+        color: #cbd5e1 !important; /* Màu xám sáng */
+        font-weight: 600;
+        transition: all 0.3s ease;
+        border-radius: 8px;
+        padding: 0.5rem 1rem !important;
+    }
+
+        .nav-link-custom:hover, .nav-item.dropdown:hover .nav-link-custom {
+            color: #00f2fe !important; /* Chuyển sang xanh sáng khi hover */
+            background-color: rgba(255, 255, 255, 0.05); /* Nền hover sáng nhẹ */
+        }
+
+    /* Dropdown của menu Quản lý (Nền tối) */
+    .nav-dropdown-menu {
+        background-color: #1e293b; /* Nền dropdown tối */
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        padding: 0.5rem;
+        margin-top: 10px;
+    }
+
+    .nav-dropdown-item {
+        border-radius: 8px;
+        font-weight: 500;
+        color: #cbd5e1;
+        transition: all 0.2s;
+    }
+
+        .nav-dropdown-item:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+            color: #00f2fe;
+        }
+
+    /* Màu icon hamburger menu */
+    .navbar-toggler {
+        border-color: rgba(255, 255, 255, 0.1) !important;
+    }
+</style>
+
+<nav class="navbar navbar-expand-lg navbar-dark custom-navbar sticky-top mb-4">
+    <div class="container-fluid px-4">
+
+        <a class="navbar-brand d-flex align-items-center" asp-area="" asp-controller="Home" asp-action="Index">
+            <i class="bi bi-hexagon-fill text-info me-2 fs-3"></i>
+            <span class="brand-gradient">Web Giải Thuật</span>
+        </a>
+
+        <button class="navbar-toggler shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar"
+                aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="mainNavbar">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-1">
+
+                @if (User.IsInRole(RoleDetails.Role_Admin))
+                {
+                    <li class="nav-item dropdown">
+                        <a class="nav-link nav-link-custom dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-shield-lock-fill text-warning me-1"></i> Quản lý
+                        </a>
+                        <ul class="dropdown-menu nav-dropdown-menu">
+                            <li>
+                                <a class="dropdown-item nav-dropdown-item" asp-controller="" asp-action="Index" asp-area="Admin">
+                                    <i class="bi bi-people-fill me-2 text-primary"></i> Quản lý User
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                }
+
+                @if (User.Identity!.IsAuthenticated)
+                {
                     <li class="nav-item">
-                        <a asp-area="Customer" asp-controller="FP" asp-action="Index" class="nav-link text-white position-relative">
-                            <i class="bi bi-cart-fill me-1 text-white"></i>
-                            Giải thuật FP-Growth <span id="cart-amount"></span>
+                        <a asp-area="Customer" asp-controller="Apriori" asp-action="Index" class="nav-link nav-link-custom">
+                            <i class="bi bi-bar-chart-steps text-success me-1"></i> Apriori
                         </a>
                     </li>
-                    }
-                </ul>
-                <partial name="_LoginPartial" />
-            </div>
+                    <li class="nav-item">
+                        <a asp-area="Customer" asp-controller="FP" asp-action="Index" class="nav-link nav-link-custom">
+                            <i class="bi bi-diagram-3-fill text-info me-1"></i> FP-Growth
+                        </a>
+                    </li>
+                }
+            </ul>
+
+            <partial name="_LoginPartial" />
+
         </div>
-    </nav>
+    </div>
+</nav>

@@ -5,36 +5,81 @@
     ViewData["ActivePage"] = ManageNavPages.Index;
 }
 
-<h3>@ViewData["Title"]</h3>
-<partial name="_StatusMessage" for="StatusMessage" />
+<style>
+    .profile-card {
+        background: #ffffff;
+        padding: 2.5rem;
+        border-radius: 15px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        border-top: 5px solid #4facfe;
+        margin-bottom: 2rem;
+        margin-top: 1rem;
+    }
+
+    .profile-title {
+        color: #2c3e50;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+    }
+
+    .btn-gradient {
+        background: linear-gradient(to right, #4facfe 0%, #00f2fe 100%);
+        border: none;
+        color: white;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+        .btn-gradient:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 242, 254, 0.4);
+            color: white;
+        }
+
+    .form-floating .form-control:focus {
+        border-color: #4facfe;
+        box-shadow: 0 0 0 0.25rem rgba(79, 172, 254, 0.25);
+    }
+
+    .form-control:disabled, .form-control[readonly] {
+        background-color: #f8f9fa;
+        color: #6c757d;
+        border: 1px dashed #ced4da;
+    }
+</style>
+
+<h3 class="profile-title">@ViewData["Title"]</h3>
+
 <div class="row">
-    <div class="col-md-6">
-        <form id="profile-form" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
-            <div class="form-floating mb-3">
-                <input asp-for="Username" class="form-control" placeholder="Please choose your username." disabled />
-                <label asp-for="Username" class="form-label">Tài khoản</label>
-            </div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.PhoneNumber" class="form-control" placeholder="Vui lòng nhập số điện thoại của bạn." />
-                <label asp-for="Input.PhoneNumber" class="form-label"></label>
-                <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
-            </div>
-            <div class="form-floating mb-3">
-                <input asp-for="HomeAddress" class="form-control" placeholder="Vui lòng địa chỉ của bạn." disabled />
-                <label asp-for="HomeAddress" class="form-label">Địa chỉ</label>
-                
-            </div>
-            <div class="form-floating mb-3">
-                <input asp-for="PostalCode" class="form-control" placeholder="Vui lòng nhập mã bưu điện."  disabled/>
-                <label asp-for="PostalCode" class="form-label">Mã bưu điện</label>
-               
-            </div>
-            <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">Lưu</button>
-        </form>
+    <div class="col-md-8 col-lg-7">
+        <div class="profile-card">
+            <form id="profile-form" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3" role="alert"></div>
+
+                <div class="form-floating mb-3">
+                    <input asp-for="Username" class="form-control" placeholder="Please choose your username." disabled />
+                    <label asp-for="Username" class="form-label">Tài khoản</label>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.PhoneNumber" class="form-control" placeholder="Vui lòng nhập số điện thoại của bạn." />
+                    <label asp-for="Input.PhoneNumber" class="form-label">Số điện thoại</label>
+                    <span asp-validation-for="Input.PhoneNumber" class="text-danger text-sm"></span>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <input asp-for="HomeAddress" class="form-control" placeholder="Vui lòng nhập địa chỉ của bạn." disabled />
+                    <label asp-for="HomeAddress" class="form-label">Địa chỉ</label>
+                </div>
+
+                <div class="form-floating mb-4">
+                    <input asp-for="PostalCode" class="form-control" placeholder="Vui lòng nhập mã bưu điện." disabled />
+                    <label asp-for="PostalCode" class="form-label">Mã bưu điện</label>
+                </div>
+
+                <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-gradient rounded-pill">Lưu thay đổi</button>
+            </form>
+        </div>
     </div>
 </div>
-
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}
