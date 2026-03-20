@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
+using Edi.Captcha;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -20,12 +21,14 @@ namespace Web_algorithm_award.Areas.Identity.Pages.Account
         private readonly IUserStore<ApplicationUser> _userStore;
         private readonly IUserEmailStore<ApplicationUser> _emailStore;
         private readonly ILogger<ApplicationUser> _logger;
+        private readonly ISessionBasedCaptcha _captcha;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
             IUserStore<ApplicationUser> userStore,
             SignInManager<ApplicationUser> signInManager,
-            ILogger<ApplicationUser> logger
+            ILogger<ApplicationUser> logger,
+            ISessionBasedCaptcha captcha
             )
         {
             _userManager = userManager;
@@ -33,6 +36,7 @@ namespace Web_algorithm_award.Areas.Identity.Pages.Account
             _emailStore = GetEmailStore();
             _signInManager = signInManager;
             _logger = logger;
+            _captcha = captcha;
         }
 
         /// <summary>
@@ -114,6 +118,14 @@ namespace Web_algorithm_award.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
+                string userCaptcha = Request.Form["UserCaptchaCode"];
+
+                if (!_captcha.Validate(userCaptcha, HttpContext.Session))
+                {
+                    TempData["ErrorMessage"] = "Mã xác nhận không chính xác.";
+                    return Page();
+                }
+
                 var user = CreateUser();
                 user.Name = Input.Name;
                 user.HomeAddress = Input.HomeAddress;

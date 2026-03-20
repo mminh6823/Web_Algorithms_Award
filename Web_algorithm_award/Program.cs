@@ -1,3 +1,4 @@
+using Edi.Captcha;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -45,6 +46,11 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
+builder.Services.AddSessionBasedCaptcha(options => {
+    options.Letters = "2346789ABCDEFGHJKLMNPRTUVWXYZ"; 
+    options.SessionName = "CaptchaCode";
+    options.CodeLength = 5;
+});
 // Cấu hình phản hồi lỗi ModelState theo JSON
 builder.Services.Configure<ApiBehaviorOptions>(o =>
 {
@@ -80,6 +86,12 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseSession(); // Sử dụng Session
+app.UseSessionCaptcha(options =>
+{
+    options.RequestPath = "/get-captcha-image";
+    options.ImageHeight = 40;
+    options.ImageWidth = 140;
+});
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 

@@ -92,7 +92,27 @@
                     <label asp-for="Input.Password" class="form-label">Mật khẩu</label>
                     <span asp-validation-for="Input.Password" class="text-danger text-sm"></span>
                 </div>
+                <div class="mb-3">
+                    <label class="custom-form-label">Nhập mã captcha</label>
+                    <div class="captcha-area">
+                        <div class="d-flex align-items-center">
 
+                            <img id="img-captcha" src="/get-captcha-image" alt="Captcha" class="border rounded me-2"
+                                 style="cursor: pointer;" title="Nhấn vào đây để tải lại mã khác"
+                                 onclick="this.src = '/get-captcha-image?' + new Date().getTime();" />
+
+                            <input type="text" name="UserCaptchaCode" class="custom-input form-control" autocomplete="off" required />
+
+                        </div>
+
+                        @if (ViewData.ModelState["UserCaptchaCode"]?.Errors.Count > 0)
+                        {
+                            <span class="text-danger small d-block mt-1">
+                                @ViewData.ModelState["UserCaptchaCode"].Errors[0].ErrorMessage
+                            </span>
+                        }
+                    </div>
+                </div>
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <div class="form-check">
                         <input class="form-check-input" asp-for="Input.RememberMe" id="rememberMe" />

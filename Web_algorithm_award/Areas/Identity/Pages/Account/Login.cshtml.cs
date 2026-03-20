@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
+using Edi.Captcha;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -15,11 +16,12 @@ namespace Web_algorithm_award.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
-
-        public LoginModel(SignInManager<ApplicationUser> signInManager, ILogger<LoginModel> logger)
+        private readonly ISessionBasedCaptcha _captcha;
+        public LoginModel(SignInManager<ApplicationUser> signInManager, ILogger<LoginModel> logger, ISessionBasedCaptcha captcha)
         {
             _signInManager = signInManager;
             _logger = logger;
+            _captcha = captcha;
         }
 
         /// <summary>
@@ -103,6 +105,15 @@ namespace Web_algorithm_award.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
+                string userCaptcha = Request.Form["UserCaptchaCode"];
+
+                // Kiểm tra tính hợp lệ của Captcha
+                if (!_captcha.Validate(userCaptcha, HttpContext.Session))
+                {
+                    TempData["ErrorMessage"] = "Mã xác nhận không chính xác.";
+                    return Page();
+                }
+
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
